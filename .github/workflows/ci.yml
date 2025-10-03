@@ -54,3 +54,8 @@ jobs:
           python --version
           # Optional: run pytest if you have tests
           # pytest
+
+      - name: Run tests - 22f3001840@ds.study.iitm.ac.in
+        run: |
+          echo "✅ Workflow running on branch ${{ github.ref }}"
+          python --version
