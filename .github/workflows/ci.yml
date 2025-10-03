@@ -1,30 +1,56 @@
-name: CI Workflow
+name: CI with Cache
 
 on:
   push:
     branches:
       - main
   pull_request:
+  workflow_dispatch:   # optional manual trigger
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2️⃣ Set up Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
+      # 3️⃣ Cache pip dependencies
+      - name: Cache dependencies - cache-0ee664c
+        id: cache-step
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: cache-0ee664c
+          restore-keys: |
+            cache-0ee664c
+
+      # 4️⃣ Prime cache step
+      - name: prime-cache-0ee664c
+        run: |
+          if [ "${{ steps.cache-step.outputs.cache-hit }}" == 'true' ]; then
+            echo "✅ Cache hit!"
+          else
+            echo "❌ Cache miss!"
+          fi
+
+      # 5️⃣ Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Run tests - 22f3001840@ds.study.iitm.ac.in
+      # 6️⃣ Run FastAPI tests / sanity check
+      - name: Run tests
         run: |
-          echo "✅ Workflow running on branch ${{ github.ref }}"
+          echo "Running tests..."
           python --version
+          # Optional: run pytest if you have tests
+          # pytest
