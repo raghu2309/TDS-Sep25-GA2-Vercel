@@ -11,5 +11,5 @@
     "ms-python.python"
   ],
   "postCreateCommand": "uv pip install fastapi",
-  "remoteUser": "vscode"
+  "remoteUser": "codespace"  // <-- CHANGED from "vscode" to "codespace"
 }
